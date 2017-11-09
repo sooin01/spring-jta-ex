@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- Atomikos 설정 start -->
+	<bean id="userTransactionService" class="com.atomikos.icatch.config.UserTransactionServiceImp" init-method="init" destroy-method="shutdownForce">
+		<constructor-arg>
+			<props>
+				<prop key="com.atomikos.icatch.service">
+					com.atomikos.icatch.standalone.UserTransactionServiceFactory
+				</prop>
+			</props>
+		</constructor-arg>
+	</bean>
+
+	<!-- Construct Atomikos UserTransactionManager, needed to configure Spring -->
+	<bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close" depends-on="userTransactionService">
+		<property name="startupTransactionService" value="false" />
+		<property name="forceShutdown" value="false" />
+	</bean>
+
+	<bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp" depends-on="userTransactionService">
+		<property name="transactionTimeout" value="300" />
+	</bean>
+
+	<!-- JTA 트랜잭션 설정 -->
+	<bean id="jtaTransactionManager" class="org.springframework.transaction.jta.JtaTransactionManager" depends-on="userTransactionService">
+		<property name="transactionManager" ref="atomikosTransactionManager" />
+		<property name="userTransaction" ref="atomikosUserTransaction" />
+	</bean>
+	
+	<!-- @Transactional 사용 설정 -->
+	<tx:annotation-driven transaction-manager="jtaTransactionManager" />
+	
+	<!-- DataSource1 설정 -->
+	<bean id="testDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean">
+		<property name="uniqueResourceName" value="test" />
+		<property name="xaDataSourceClassName" value="org.mariadb.jdbc.MariaDbDataSource" />
+		<property name="xaProperties">
+			<props>
+				<prop key="url">jdbc:mariadb://localhost:3306/test</prop>
+				<prop key="user">test</prop>
+				<prop key="password">test</prop>
+			</props>
+		</property>
+		<property name="poolSize" value="50" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="testDataSource" />
+		<property name="mapperLocations" value="classpath*:mappers/mariadb/test/**/*.xml" />
+		<property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="mapUnderscoreToCamelCase" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+	
+	<mybatis-spring:scan base-package="com.my.app.test.*.mapper" factory-ref="sqlSessionFactory" template-ref="sqlSession" />
+	
+	<!-- DataSource2 설정 -->
+	<bean id="testDataSource2" class="com.atomikos.jdbc.AtomikosDataSourceBean">
+		<property name="uniqueResourceName" value="test2" />
+		<property name="xaDataSourceClassName" value="org.mariadb.jdbc.MariaDbDataSource" />
+		<property name="xaProperties">
+			<props>
+				<prop key="url">jdbc:mariadb://localhost:3306/test2</prop>
+				<prop key="user">test2</prop>
+				<prop key="password">test2</prop>
+			</props>
+		</property>
+		<property name="poolSize" value="50" />
+	</bean>
+	
+	<bean id="sqlSessionFactory2" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="testDataSource2" />
+		<property name="mapperLocations" value="classpath*:mappers/mariadb/test2/**/*.xml" />
+		<property name="configuration">
+			<bean class="org.apache.ibatis.session.Configuration">
+				<property name="mapUnderscoreToCamelCase" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="sqlSession2" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory2" />
+	</bean>
+	
+	<mybatis-spring:scan base-package="com.my.app.test2.*.mapper" factory-ref="sqlSessionFactory2" template-ref="sqlSession2" />
+		
+</beans>

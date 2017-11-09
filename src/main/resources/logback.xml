@@ -1,0 +1,38 @@
+<configuration>
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
+			by default -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Application Loggers -->
+	<logger name="com.clould.app" level="debug" />
+	
+	<logger name="org.apache.http.headers" level="info" />
+
+	<logger name="org.apache.http.wire" level="debug" />
+
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core" level="info" />
+
+	<logger name="org.springframework.beans" level="info" />
+
+	<logger name="org.springframework.context" level="info" />
+
+	<logger name="org.springframework.web" level="info" />
+
+	<logger name="org.springframework.jdbc" level="info" />
+
+	<logger name="org.mybatis" level="info" />
+	
+	<logger name="com.zaxxer.hikari" level="info" />
+
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>
