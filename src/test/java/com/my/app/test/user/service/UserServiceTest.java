@@ -13,8 +13,8 @@ import com.my.app.test.user.domain.User;
 @WebAppConfiguration
 @ContextConfiguration(locations = { //
 		"classpath:spring/root-context.xml", //
-		// "classpath:spring/atomikos-context.xml", // atomikos
-		"classpath:spring/bitronix-context.xml", // bitronix
+		"classpath:spring/atomikos-context.xml", // atomikos
+		// "classpath:spring/bitronix-context.xml", // bitronix
 })
 public class UserServiceTest {
 
