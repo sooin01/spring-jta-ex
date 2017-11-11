@@ -25,7 +25,7 @@
 	<!-- @Transactional 사용 설정 -->
 	<tx:annotation-driven transaction-manager="jtaTransactionManager" />
 
-	<bean id="testDataSource" class="bitronix.tm.resource.jdbc.PoolingDataSource" init-method="init" destroy-method="close" primary="true">
+	<bean id="testDataSource" class="bitronix.tm.resource.jdbc.PoolingDataSource" init-method="init" destroy-method="close">
 		<property name="uniqueName" value="test1" />
 		<property name="className" value="org.mariadb.jdbc.MariaDbDataSource" />
 		<property name="maxPoolSize" value="50" />
@@ -56,7 +56,7 @@
 	
 	<mybatis-spring:scan base-package="com.my.app.test.*.mapper" factory-ref="sqlSessionFactory" template-ref="sqlSession" />
 
-	<bean id="testDataSource2" class="bitronix.tm.resource.jdbc.PoolingDataSource" init-method="init" destroy-method="close" primary="false">
+	<bean id="testDataSource2" class="bitronix.tm.resource.jdbc.PoolingDataSource" init-method="init" destroy-method="close">
 		<property name="uniqueName" value="test2" />
 		<property name="className" value="org.mariadb.jdbc.MariaDbDataSource" />
 		<property name="maxPoolSize" value="50" />
