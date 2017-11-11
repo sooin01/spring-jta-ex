@@ -47,7 +47,7 @@
 			<props>
 				<prop key="url">jdbc:mariadb://localhost:3306/test</prop>
 				<prop key="user">test</prop>
-				<prop key="password">test</prop>
+				<prop key="password">admin123</prop>
 			</props>
 		</property>
 		<property name="poolSize" value="50" />
@@ -75,9 +75,9 @@
 		<property name="xaDataSourceClassName" value="org.mariadb.jdbc.MariaDbDataSource" />
 		<property name="xaProperties">
 			<props>
-				<prop key="url">jdbc:mariadb://localhost:3306/test2</prop>
-				<prop key="user">test2</prop>
-				<prop key="password">test2</prop>
+				<prop key="url">jdbc:mariadb://192.168.1.29:3306/test</prop>
+				<prop key="user">test</prop>
+				<prop key="password">admin123</prop>
 			</props>
 		</property>
 		<property name="poolSize" value="50" />

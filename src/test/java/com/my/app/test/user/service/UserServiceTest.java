@@ -11,7 +11,11 @@ import com.my.app.test.user.domain.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(locations = { "classpath:spring/root-context.xml", "classpath:spring/database-context.xml" })
+@ContextConfiguration(locations = { //
+		"classpath:spring/root-context.xml", //
+		// "classpath:spring/atomikos-context.xml", // atomikos
+		"classpath:spring/bitronix-context.xml", // bitronix
+})
 public class UserServiceTest {
 
 	@Autowired
