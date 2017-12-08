@@ -6,11 +6,7 @@
 	
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>
-			/WEB-INF/classes/spring/root-context.xml
-			/WEB-INF/classes/spring/atomikos-context.xml
-			/WEB-INF/classes/spring/bitronix-context.xml
-		</param-value>
+		<param-value>/WEB-INF/classes/spring/root-context.xml</param-value>
 	</context-param>
 	
 	<listener>

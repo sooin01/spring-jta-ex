@@ -1,6 +1,8 @@
 package com.my.app.test.user.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
@@ -20,7 +22,9 @@ public class AsyncUserService {
 	@Async
 	@Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW)
 	public List<User> getUsers() {
-		List<User> users = userMapper.getUsers();
+		Map<String, Object> parameterMap = new HashMap<>();
+		parameterMap.put("userId", "test222");
+		List<User> users = userMapper.getUsers(parameterMap);
 		return users;
 	}
 

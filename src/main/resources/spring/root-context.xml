@@ -9,4 +9,8 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
 	
+	<import resource="classpath:spring/database/jdbc-context.xml" />
+	<!-- <import resource="classpath:spring/database/atomikos-context.xml" /> -->
+	<!-- <import resource="classpath:spring/database/bitronix-context.xml" /> -->
+	
 </beans>
